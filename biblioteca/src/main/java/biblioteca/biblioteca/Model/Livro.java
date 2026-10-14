@@ -34,8 +34,11 @@ public class Livro {
     @Column(name = "ds_edicao", nullable = false)
     @JsonProperty("edicao")
     private String edicao;
-    
+
 
     // Adicione a relação com Livro aqui
-
+    @ManyToOne
+    @Column(name = "ds_autor", nullable = false)
+    @JsonProperty("autor")
+    private Autor autor;
 }

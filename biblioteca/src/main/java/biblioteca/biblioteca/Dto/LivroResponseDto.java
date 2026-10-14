@@ -1,5 +1,6 @@
 package biblioteca.biblioteca.Dto;
 
+import biblioteca.biblioteca.Model.Autor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AutorResponseDto {
+public class LivroResponseDto {
     @JsonProperty("id")
     private Long id;
 
@@ -25,4 +26,7 @@ public class AutorResponseDto {
 
     @JsonProperty("edicao")
     private String edicao;
+
+    @JsonProperty("autor")
+    private Autor autor;
 }
