@@ -28,5 +28,5 @@ public class LivroResponseDto {
     private String edicao;
 
     @JsonProperty("autor")
-    private Autor autor;
+    private AutorResponseDto autorResponseDto;
 }

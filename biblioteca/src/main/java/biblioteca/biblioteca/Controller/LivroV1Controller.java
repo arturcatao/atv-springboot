@@ -31,15 +31,19 @@ public class LivroV1Controller {
         return ResponseEntity.status(HttpStatus.OK).body(livroCrudService.buscarTodosLivros());
     }
 
-    @GetMapping("/isbn/{isbn}")
+    @GetMapping("/isbn/{ISBN}")
     public ResponseEntity<?> buscarLivro(@PathVariable String ISBN) {
         return ResponseEntity.status(HttpStatus.OK).body(livroCrudService.buscarLivro(ISBN));
     }
 
-    @GetMapping()
-    public ResponseEntity<?> buscarLivros(@RequestParam String titulo) {
+    @GetMapping("/titulo/{titulo}")
+    public ResponseEntity<?> buscarLivros(@PathVariable String titulo) {
         return ResponseEntity.status(HttpStatus.OK).body(livroCrudService.buscarLivros(titulo));
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removerLivro(@PathVariable Long id) {
+        livroCrudService.removerLivro(id);
+        return ResponseEntity.noContent().build();
+    }
 }

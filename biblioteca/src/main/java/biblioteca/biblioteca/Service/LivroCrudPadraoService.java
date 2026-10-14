@@ -3,12 +3,15 @@ package biblioteca.biblioteca.Service;
 import biblioteca.biblioteca.Dto.AutorResponseDto;
 import biblioteca.biblioteca.Dto.LivroPostPutDto;
 import biblioteca.biblioteca.Dto.LivroResponseDto;
+import biblioteca.biblioteca.Model.Autor;
 import biblioteca.biblioteca.Model.Livro;
 import biblioteca.biblioteca.Repository.LivroRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.session.RedisSessionProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -52,16 +55,25 @@ public class LivroCrudPadraoService implements LivroCrudService{
 
     @Override
     public LivroResponseDto atualizarLivro(Long id, LivroPostPutDto livroPostPutDto) {
-        Livro livro = livroRepository.getById(id);
+        Livro livro = obterLivroExistente(id);
         livro.setTitulo(livroPostPutDto.getTitulo());
         livro.setAno(livroPostPutDto.getAno());
         livro.setAutor(livroPostPutDto.getAutor());
         livro.setEdicao(livroPostPutDto.getEdicao());
         livro.setISBN(livroPostPutDto.getISBN());
+
+        livroRepository.save(livro);
+        return modelMapper.map(livro, LivroResponseDto.class);
     }
 
     @Override
     public void removerLivro(Long id) {
+        obterLivroExistente(id);
         livroRepository.deleteById(id);
+    }
+
+    private Livro obterLivroExistente(Long id) {
+        return livroRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
     }
 }
