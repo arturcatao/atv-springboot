@@ -5,6 +5,7 @@ import biblioteca.biblioteca.Dto.LivroPostPutDto;
 import biblioteca.biblioteca.Dto.LivroResponseDto;
 import biblioteca.biblioteca.Model.Autor;
 import biblioteca.biblioteca.Model.Livro;
+import biblioteca.biblioteca.Repository.AutorRepository;
 import biblioteca.biblioteca.Repository.LivroRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,27 @@ public class LivroCrudPadraoService implements LivroCrudService{
     @Autowired
     LivroRepository livroRepository;
 
-    @Override
-    public LivroResponseDto criarLivro(LivroPostPutDto livroPostPutDto) {
-        Livro livro = modelMapper.map(livroPostPutDto, Livro.class);
+    @Autowired
+    AutorRepository autorRepository;
 
-        livroRepository.save(livro);
-        return modelMapper.map(livro, LivroResponseDto.class);
+    @Override
+    public LivroResponseDto criarLivro(LivroPostPutDto dto) {
+        Livro livro = new Livro();
+
+        livro.setTitulo(dto.getTitulo());
+        livro.setISBN(dto.getISBN());
+        livro.setAno(dto.getAno());
+        livro.setEdicao(dto.getEdicao());
+
+        Autor autor = obterAutorExistente(dto.getAutorId());
+        livro.setAutor(autor);
+
+        Livro livroSalvo = livroRepository.save(livro);
+
+        LivroResponseDto response = modelMapper.map(livroSalvo, LivroResponseDto.class);
+        response.setAutor(modelMapper.map(autor, AutorResponseDto.class));
+
+        return response;
     }
 
     @Override
@@ -58,7 +74,7 @@ public class LivroCrudPadraoService implements LivroCrudService{
         Livro livro = obterLivroExistente(id);
         livro.setTitulo(livroPostPutDto.getTitulo());
         livro.setAno(livroPostPutDto.getAno());
-        livro.setAutor(livroPostPutDto.getAutor());
+        livro.setAutor(obterAutorExistente(livroPostPutDto.getAutorId()));
         livro.setEdicao(livroPostPutDto.getEdicao());
         livro.setISBN(livroPostPutDto.getISBN());
 
@@ -75,5 +91,10 @@ public class LivroCrudPadraoService implements LivroCrudService{
     private Livro obterLivroExistente(Long id) {
         return livroRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+    }
+
+    private Autor obterAutorExistente(Long id) {
+        return autorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Autor não encontrado"));
     }
 }

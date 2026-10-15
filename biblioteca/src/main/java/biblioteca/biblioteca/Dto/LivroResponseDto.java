@@ -18,7 +18,7 @@ public class LivroResponseDto {
     @JsonProperty("titulo")
     private String titulo;
 
-    @JsonProperty("nacionalidade")
+    @JsonProperty("isbn")
     private String ISBN;
 
     @JsonProperty("ano")
@@ -28,5 +28,5 @@ public class LivroResponseDto {
     private String edicao;
 
     @JsonProperty("autor")
-    private AutorResponseDto autorResponseDto;
+    private AutorResponseDto autor;
 }

@@ -1,6 +1,5 @@
 package biblioteca.biblioteca.Dto;
 
-import biblioteca.biblioteca.Model.Autor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +17,7 @@ public class LivroPostPutDto {
     @NotBlank(message = "Título do livro não pode ser vazio")
     private String titulo;
 
-    @JsonProperty("ISBN")
+    @JsonProperty("isbn")
     @NotBlank(message = "ISBN do livro não pode ser vazia")
     private String ISBN;
 
@@ -32,5 +31,5 @@ public class LivroPostPutDto {
 
     @JsonProperty("autor")
     @NotNull(message = "Autor do livro não pode ser vazio")
-    private Autor autor;
+    private Long autorId;
 }
