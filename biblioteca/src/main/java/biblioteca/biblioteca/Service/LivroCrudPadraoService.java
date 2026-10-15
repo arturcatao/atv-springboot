@@ -42,10 +42,8 @@ public class LivroCrudPadraoService implements LivroCrudService{
 
         Livro livroSalvo = livroRepository.save(livro);
 
-        LivroResponseDto response = modelMapper.map(livroSalvo, LivroResponseDto.class);
-        response.setAutor(modelMapper.map(autor, AutorResponseDto.class));
 
-        return response;
+        return  modelMapper.map(livroSalvo, LivroResponseDto.class);
     }
 
     @Override
