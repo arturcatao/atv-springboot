@@ -58,7 +58,7 @@ public class LivroCrudPadraoService implements LivroCrudService{
 
     @Override
     public LivroResponseDto buscarLivro(String ISBN) {
-        return modelMapper.map(livroRepository.getByISBN((ISBN)), LivroResponseDto.class);
+        return modelMapper.map(obterLivroExistente(ISBN), LivroResponseDto.class);
     }
 
     @Override
@@ -90,6 +90,11 @@ public class LivroCrudPadraoService implements LivroCrudService{
 
     private Livro obterLivroExistente(Long id) {
         return livroRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
+    }
+
+    private Livro obterLivroExistente(String ISBN) {
+        return livroRepository.getByISBN(ISBN)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
     }
 
